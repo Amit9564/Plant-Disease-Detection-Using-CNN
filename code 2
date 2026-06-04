@@ -1,0 +1,29 @@
+import numpy as np
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+
+model = load_model('model/plant_disease_model.h5')
+
+classes = [
+    'Healthy',
+    'Early Blight',
+    'Late Blight',
+    'Leaf Spot'
+]
+
+def predict_disease(img_path):
+
+    test_image = image.load_img(
+        img_path,
+        target_size=(128,128)
+    )
+
+    test_image = image.img_to_array(test_image)
+
+    test_image = np.expand_dims(test_image,axis=0)
+
+    result = model.predict(test_image)
+
+    prediction = classes[np.argmax(result)]
+
+    return prediction
